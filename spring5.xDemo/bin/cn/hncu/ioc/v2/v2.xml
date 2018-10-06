@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	">
+	<!-- 如果该 bean 不被别的对象 引用(ref) 可以不设置 id -->
+	<bean id="login" class="cn.hncu.ioc.v2.LoginAction">
+		<!-- 注入基本数据类型和String的方式 -->
+		<!-- property是根据类反射根据name进行推测调用相应的set方法进行值的注入 -->
+		<property name="username" value="Tom"></property>
+		<property name="password" value="1234"/> <!-- 简单的注入值可以自封闭 -->
+		
+		<!-- 注入对象的方式 -->
+		<property name="service" ref="ser1"></property>
+	</bean>
+	
+	<!-- 该bean 被别的 对象引用了 所以必须设置 id  -->
+	<bean id="ser1" class="cn.hncu.ioc.v2.service.LoginServiceImpl">
+		<!-- 注入对象的方式 -->
+		<property name="dao" ref="dao2"></property>
+	</bean>
+	
+	<!-- 该bean 被别的 对象引用了 所以必须设置 id  -->
+	<bean name="dao1" class="cn.hncu.ioc.v2.dao.LoginDaoMySql"></bean>
+	
+	<!-- 该bean 被别的 对象引用了 所以必须设置 id  -->
+	<bean name="dao2" class="cn.hncu.ioc.v2.dao.LoginDaoOracle"></bean>
+	
+</beans>

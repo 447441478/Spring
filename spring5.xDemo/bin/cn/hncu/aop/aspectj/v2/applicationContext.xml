@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	">
+	
+	<!-- 使用 AspectJExpressionPointcutAdvisor 切面，该类封装了切点，只要给切点表达式即可-->
+	<bean class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+	
+		<!-- 切点表达式 -->
+		<property name="expression" value="execution( * cn.hncu..Person.run(..) )" />
+		
+		<!-- 通知：环绕通知，即前后都拦截 -->
+		<property name="advice">
+			<bean class="cn.hncu.aop.aspectj.v2.AroundAdviceImpl"/>
+		</property>
+	</bean>
+	
+	<bean class="cn.hncu.aop.aspectj.v2.domian.Person" />
+	
+	<!-- 通过切面自动扫描容器中符合切点表达式的bean，并生产代理bean -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	
+</beans>

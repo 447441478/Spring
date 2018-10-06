@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	">
+	
+	<!-- 被代理的bean -->
+	<bean id="person" class="cn.hncu.aop.hello.v2.domain.Person" />
+	
+	<!-- 切点 -->
+	<bean id="pointCut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+		<property name="pattern" value=".*run.*"/>
+	</bean>
+	<!-- 通知 -->
+	<bean id="advice" class="cn.hncu.aop.hello.v2.AroundAdviceImpl" />
+	
+	<!-- 切面=切点+通知 -->
+	<bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+		<property name="pointcut" ref="pointCut"/>
+		<property name="advice" ref="advice"/>
+	</bean>
+	
+	<!-- 代理bean工厂 -->
+	<bean id="factory" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<!-- 被代理的bean -->
+		<property name="target" ref="person" />
+		<!-- 切面方案 -->
+		<property name="interceptorNames">
+			<list>
+				<value>advisor</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

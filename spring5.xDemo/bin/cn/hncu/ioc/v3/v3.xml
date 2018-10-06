@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	">
+	<bean id="myDate" class="cn.hncu.ioc.v3.domain.MyDate">
+		<property name="date" value="2000-10-04" />
+	</bean>
+	
+	<bean id="p" class="cn.hncu.ioc.v3.domain.Person">
+		<!-- 基本数据类型和Sting类型数据的注入  通过 value属性/value子标签-->
+		<property name="name">
+			<value>张三</value>
+		</property>
+		<property name="age" value="18"/>
+		
+		<!-- 自定义的类对象的注入  通过 ref属性/ref子标签-->
+		<property name="birth" ref="myDate" />
+		
+		<!-- 注入 集合  -->
+		<property name="list" >
+			<list>
+				<value>312</value>
+				<value>123</value>
+				<value>刘备</value>
+			</list>
+		</property>
+		
+		<property name="set" >
+			<!-- 不用默认的 java.util.LinkedHashSet类 采用自定义类，其他集合类似 -->
+			<bean class="java.util.HashSet"	>
+				<constructor-arg>
+					<list>
+						<value>312</value>
+						<value>刘备</value>
+						<value>123</value>
+					</list>
+				</constructor-arg>
+			</bean>
+		</property>
+		
+		<property name="map">
+			<map>
+				<entry key="Tom" value="Jack"/>
+				<entry key="张飞" value="关羽"/>
+				<!-- 可以引用对象 -->
+				<entry key="时间" value-ref="myDate"/>
+			</map>
+		</property>
+		
+		<property name="objs">
+			<array>
+				<!-- 引用对象 -->
+				<ref bean="myDate"/>
+				<!-- 匿名内部bean -->
+				<bean class="java.util.HashMap">
+					<constructor-arg>
+						<map>
+							<entry key="hello" value="你好" />
+						</map>
+					</constructor-arg>
+				</bean>
+			</array>
+		</property>
+		
+	</bean>
+	
+</beans>

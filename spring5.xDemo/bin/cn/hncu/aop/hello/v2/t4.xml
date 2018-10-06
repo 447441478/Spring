@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	">
+	
+	<!-- 切面=切点+通知 -->
+	<!-- 相比于 t2版本  这里的切面bean采用了DefaultPointcutAdvisor的兄弟类，使用时更简便-->
+	<bean id="advisor" class="org.springframework.aop.support.RegexpMethodPointcutAdvisor">
+		<!-- 相比于 t2版本 这里的 切点 已经融入切面之中，只需要配置拦截方法的表达式即可-->
+		<property name="patterns">
+			<list>
+				<value>.*run.*</value>
+				<value>.*eat.*</value>
+			</list>
+		</property>
+		
+		<!-- 通知 -->
+		<property name="advice">
+			<bean id="advice" class="cn.hncu.aop.hello.v2.AroundAdviceImpl" />
+		</property>
+		
+	</bean>
+	
+	<bean id="person" class="cn.hncu.aop.hello.v2.domain.Person" />
+	
+	<bean class="cn.hncu.aop.hello.v2.domain.Student"></bean>
+	
+	<!-- 自动代理bean -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	
+	
+</beans>
