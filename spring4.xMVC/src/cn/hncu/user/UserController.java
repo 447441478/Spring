@@ -12,7 +12,7 @@ import cn.hncu.user.service.IUserService;
 @Controller
 @RequestMapping(value="/user")
 public class UserController {
-	
+	//使用该注解时，会在Spring容器中找到name为userService的bean,然后进行注入。
 	@Resource(name="userService")
 	private IUserService userService;
 	
