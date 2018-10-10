@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	" >
+	<!-- 
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	当访问bean的方式如下时，需要使用上面这个HandlerMapping
+	<bean id="/stud/one" class="cn.hncu.controller.HelloController" />
+	 -->
+	 
+	 
+	<!-- 下面这个是用来 解析classpath下 视图资源的解析器 -->
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<!-- 给定一个默认视图类型，其它视图如果给出具体的父类视图，默认继承该视图类型 -->
+		<property name="defaultParentView" value="default" />
+	</bean>
+	
+	
+	<!-- 使用 @Controller 注解时早期版本采用 bean 的这种方式进行映射，现在已经过时。
+		   现在采用下面 标签mvc:annotation-driven这种方式。
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	 -->
+	<mvc:annotation-driven />
+	
+	<!-- 扫描注解并且把符合规则的类在容器中生成相应的bean -->
+	<context:component-scan base-package="/cn/hncu" />
+	
+	
+	<!-- 下面两个bean通过name的值 配合 @Resource注解 给Controller的userService注入具体实现类 -->
+	<!-- 模拟进行维护，只要换一个class就以换掉具体实现，
+		   不用改原来实现类的代码 ，采用注解的话就要移除@Service注解
+	<bean name="userService" class="cn.hncu.user.service.UserServiceImpl">
+	 -->
+	<bean name="userService" class="cn.hncu.user.service.UserServiceImpl2">
+		<property name="userDao">
+			<bean class="cn.hncu.user.dao.UserDaoImpl" />
+		</property>
+	</bean>
+	
+	
+	<!-- 使用Apache的文件上传工具时，必须使用下面这个Bean 并且id/name属性必须为 "multipartResolver" -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	
+</beans>

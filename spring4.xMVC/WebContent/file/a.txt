@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	" >
+	<!-- 
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+	当访问bean的方式如下时，需要使用上面这个HandlerMapping
+	<bean id="/stud/one" class="cn.hncu.controller.HelloController" />
+	 -->
+	 
+	<!-- 下面这个是用来 解析classpath下 视图资源的解析器 -->
+	<bean class="org.springframework.web.servlet.view.ResourceBundleViewResolver">
+		<!-- 给定一个默认视图类型，其它视图如果给出具体的父类视图，默认继承该视图类型 -->
+		<property name="defaultParentView" value="default" />
+	</bean>
+	
+	<!-- 使用 @Controller 注解时早期版本采用这种方式进行映射，现在已经过时。
+		   现在采用下面 标签mvc:annotation-driven这种方式。
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+	 -->
+	<mvc:annotation-driven />
+	<context:component-scan base-package="/cn/hncu/controller" />
+	
+	
+	
+</beans>
