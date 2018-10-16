@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans  http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context  http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/mvc  http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx.xsd
+	http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop.xsd
+	" >
+	
+	<!-- 
+	使用Spring自带的数据库连接池
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql:///mybatis?characterEncoding=utf-8" />
+		<property name="username" value="root"></property>
+     	<property name="password" value="1234"></property>
+	</bean>
+	-->
+	
+	<!-- 使用c3p0的数据库连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+		<property name="jdbcUrl" value="jdbc:mysql:///mybatis?characterEncoding=utf-8" />
+		<property name="user" value="root" />
+		<property name="password" value="1234" />
+	</bean>
+	
+	<!-- 把MyBatis整合到Spring中 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<!-- ORM映射 -->
+		
+		<!-- 法1：使用mybatis配置文件中的mappers标签进行具体映射文件的关联    间接
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+		 -->
+		 
+		<!-- 法2：使用 mapperLocations 属性 直接关联映射文件  直接 -->
+		<property name="mapperLocations" >
+			<list>
+				<!-- 路径规则同   Ant 工具的规则 -->
+				<value>classpath:cn/hncu/domain/*Mapper.xml</value>
+			</list>
+		</property>
+	</bean>
+	
+	
+	<!-- 1.配置事务 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<!-- 把数据库连接池交给事务管理器管理 -->
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 2.注解事务   Spring推荐@Transactional用在实现类上，本例用在接口上无效，原因注解是不能继承的，而调用的是接口的实现类即注解起不了作用  -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- 3.创建sqlSession -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+	
+</beans>

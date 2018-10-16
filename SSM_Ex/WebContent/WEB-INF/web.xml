@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>SSM_Ex</display-name>
+	
+	<filter>
+		<!-- 使用Spring自带的字符编码过滤器 -->
+		<filter-name>characterFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>		
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>characterFilter</filter-name>
+		<!-- 只过过滤进入SpringMVC中的请求 -->
+		<servlet-name>hncu</servlet-name>	
+	</filter-mapping>
+	
+	<!-- 加载Spring容器需要下面的listener和context-param -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<context-param>
+		<!-- name是死的 -->
+		<param-name>contextConfigLocation</param-name>
+		<!-- Spring容器配置文件路径 -->
+		<param-value>
+			/WEB-INF/config/config.xml
+			classpath:beans.xml
+		</param-value>
+	</context-param>
+	
+	<!-- 下面这个Servlet是进入SpringMVC的入口 -->
+	<servlet>
+		<servlet-name>hncu</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<!-- 采用值为空的contextConfigLocation即可把'所有bean'放在Spring容器中 -->
+			<param-name>contextConfigLocation</param-name>
+			<param-value></param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>hncu</servlet-name>
+		<url-pattern>/hncu/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<welcome-file-list>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
